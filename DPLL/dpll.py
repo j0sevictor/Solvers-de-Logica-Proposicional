@@ -1,5 +1,6 @@
 def main():
     clauses, numVariaveis, numClausues = cnfFormula()
+    
     print(clauses, numVariaveis, numClausues)
 
 
@@ -25,8 +26,12 @@ def cnfFormula() -> tuple:
     
     return (clauses, numVariables, numClauses)
 
-def simplifica(cl):
+def dpll(clauses: list[set]) -> bool:
     pass
+
+def simplifica(clauses: list[set]) -> set:
+    pass
+
 
 if __name__ == '__main__':
     main()

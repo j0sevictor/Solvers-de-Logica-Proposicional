@@ -1,10 +1,10 @@
 def main():
-    clauses, numVariaveis, numClausues = cnfFormula()
-    
-    print(clauses, numVariaveis, numClausues)
+    clauses = cnfFormula()
+    clauses.sort(key= lambda k: len(k))
+    print(clauses)
 
 
-def cnfFormula() -> tuple:
+def cnfFormula() -> list[set]:
     numVariables, numClauses = 0, 0
 
     with open('DPLL\CNFFormula.txt', 'r') as formulae:
@@ -24,13 +24,15 @@ def cnfFormula() -> tuple:
 
             clauses.append(clause)
     
-    return (clauses, numVariables, numClauses)
+    return clauses
 
 def dpll(clauses: list[set]) -> bool:
     pass
 
 def simplifica(clauses: list[set]) -> set:
-    pass
+    for clause in clauses:
+        if len(clause) == 1:
+            pass
 
 
 if __name__ == '__main__':

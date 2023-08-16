@@ -11,8 +11,6 @@ def main():
         print('Unsat')
 
 def dpll(clauses: list[set[int]]) -> bool:
-    global variaveis
-
     TransformacaoBooleana(clauses)
 
     if len(clauses) == 0: return True
@@ -25,12 +23,12 @@ def dpll(clauses: list[set[int]]) -> bool:
     
     cpyClauses = copyClauses(clauses)
     cpyClauses.insert(0, set({var}))
-    variaveis['x' + str(var)] = True
+    addVarValoration(var, True)
     if dpll(cpyClauses): return True
 
     cpyClauses = copyClauses(clauses)
     cpyClauses.insert(0, set({-var}))
-    variaveis['x' + str(var)] = False
+    addVarValoration(var, False)
     if dpll(cpyClauses): return True
 
 def copyClauses(clauses: list[set[int]]) -> list[set[int]]:
@@ -59,6 +57,7 @@ def cnfFormula() -> list[set[int]]:
 def TransformacaoBooleana(clauses: list[set[int]]):
     while len(clauses) > 0 and len(clauses[0]) == 1:
         unit = clauses.pop(0).pop()
+        addVarValoration(unit, True)
         for clause in clauses[:]:
             if unit in clause:
                 clauses.remove(clause)
@@ -69,6 +68,13 @@ def TransformacaoBooleana(clauses: list[set[int]]):
 
 def checarContradicao(clauses: list[set[int]]) -> bool:
     return (len(clauses[0]) == 0)
+
+def addVarValoration(var: int, valoration: bool):
+    global variaveis
+    if var > 0:
+        variaveis['x' + str(var)] = valoration
+    elif var < 0:
+        variaveis['x' + str(-var)] = not valoration
 
 if __name__ == '__main__':
     main()

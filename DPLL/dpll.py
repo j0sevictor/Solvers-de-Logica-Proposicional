@@ -1,8 +1,8 @@
 solution: dict[int, bool] = dict()
 
 def main():
-    clauses = cnfFormula()
-    clauses.sort(key= lambda k: len(k), reverse=True)
+    clauses = cnfFormulaContructor('DPLL/inputs/cnf2.txt')
+    sortClauses(clauses)
 
     if dpll(clauses):
         print('Sat')
@@ -37,8 +37,7 @@ def TransformacaoBooleana(clauses: list[set[int]]):
                 clauses.remove(clause)
             elif -unit in clause:
                 clause.remove(-unit)
-
-        clauses.sort(key= lambda k: len(k), reverse=True)
+        sortClauses(clauses)
 
 def copyClauses(clauses: list[set[int]]) -> list[set[int]]:
     newClauses: list[set[int]] = list()
@@ -47,19 +46,22 @@ def copyClauses(clauses: list[set[int]]) -> list[set[int]]:
 
     return newClauses
 
-def cnfFormula() -> list[set[int]]:
+
+def cnfFormulaContructor(path: str) -> list[set[int]]:
     clauses = list()
 
-    with open('DPLL/inputs/cnf2.txt', 'r') as formulae:
+    with open(path, 'r') as formulae:
         lines = formulae.readlines()
         for line in lines:
-            if line.startswith('c') or line.startswith('p'): continue
+            if line.startswith('c') or line.startswith('p') or \
+            line.startswith('0') or line.startswith('\n') or line.startswith('%'): continue
 
             clause = set()
-            for var in line.split(sep=' '):
-                varInt = int(var)
-                if varInt != 0:
-                    clause.add(varInt)
+            for var in line.split(sep=' ')[:-1]:
+                if var != '':
+                  varInt = int(var)
+                  if varInt != 0:
+                      clause.add(varInt)
             clauses.append(clause)
     return clauses
 
@@ -76,6 +78,9 @@ def addVarValoration(var: int, valoration: bool):
 def heuristc(clauses: list[set[int]]) -> int:
     for elem in clauses[-1]:
         return elem
+
+def sortClauses(clauses: list[set[int]]):
+    clauses.sort(key= lambda k: len(k), reverse=True)
 
 if __name__ == '__main__':
     main()
